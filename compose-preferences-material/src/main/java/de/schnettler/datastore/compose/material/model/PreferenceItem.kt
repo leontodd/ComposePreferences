@@ -14,7 +14,7 @@ sealed class Preference {
      * A single [Preference] item
      */
     sealed class PreferenceItem<T> : Preference() {
-        abstract val summary: String
+        abstract val summary: String?
         abstract val singleLineTitle: Boolean
         abstract val icon: @Composable () -> Unit
 
@@ -23,7 +23,7 @@ sealed class Preference {
          */
         data class TextPreference(
             override val title: String,
-            override val summary: String,
+            override val summary: String? = null,
             override val singleLineTitle: Boolean,
             override val icon: @Composable () -> Unit,
             override val enabled: Boolean = true,
@@ -37,7 +37,7 @@ sealed class Preference {
         data class SwitchPreference(
             val request: PreferenceRequest<Boolean>,
             override val title: String,
-            override val summary: String,
+            override val summary: String? = null,
             override val singleLineTitle: Boolean,
             override val icon: @Composable () -> Unit,
             override val enabled: Boolean = true,
@@ -50,7 +50,7 @@ sealed class Preference {
         data class ListPreference(
             val request: PreferenceRequest<String>,
             override val title: String,
-            override val summary: String,
+            override val summary: String? = null,
             override val singleLineTitle: Boolean,
             override val icon: @Composable () -> Unit,
             override val enabled: Boolean = true,
@@ -65,7 +65,7 @@ sealed class Preference {
         data class MultiSelectListPreference(
             val request: PreferenceRequest<Set<String>>,
             override val title: String,
-            override val summary: String,
+            override val summary: String? = null,
             override val singleLineTitle: Boolean,
             override val icon: @Composable () -> Unit,
             override val enabled: Boolean = true,
@@ -79,7 +79,7 @@ sealed class Preference {
         data class SeekBarPreference(
             val request: PreferenceRequest<Float>,
             override val title: String,
-            override val summary: String,
+            override val summary: String? = null,
             override val singleLineTitle: Boolean,
             override val icon: @Composable () -> Unit,
             override val enabled: Boolean = true,
@@ -96,7 +96,7 @@ sealed class Preference {
         data class DropDownMenuPreference(
             val request: PreferenceRequest<String>,
             override val title: String,
-            override val summary: String,
+            override val summary: String? = null,
             override val singleLineTitle: Boolean,
             override val icon: @Composable () -> Unit,
             override val enabled: Boolean = true,

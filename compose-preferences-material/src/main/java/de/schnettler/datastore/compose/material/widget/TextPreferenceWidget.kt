@@ -27,7 +27,9 @@ internal fun TextPreferenceWidget(
                     maxLines = if (preference.singleLineTitle) 1 else Int.MAX_VALUE
                 )
             },
-            secondaryText = { Text(text = summary ?: preference.summary) },
+            secondaryText = (summary ?: preference.summary)?.let { summary ->
+                { androidx.compose.material.Text(text = summary) }
+            },
             icon = preference.icon,
             modifier = Modifier.clickable(onClick = { if (isEnabled) onClick() }),
             trailing = trailing,
