@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -39,6 +41,7 @@ fun PreferenceScreen(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     statusBarPadding: Boolean = false,
+    groupDividers: Boolean = true,
 ) {
     val dataStoreManager = remember {
         DataStoreManager(dataStore)
@@ -49,7 +52,8 @@ fun PreferenceScreen(
         modifier = modifier,
         dataStoreManager = dataStoreManager,
         contentPadding = contentPadding,
-        statusBarPadding = statusBarPadding
+        statusBarPadding = statusBarPadding,
+        groupDividers = groupDividers
     )
 }
 
@@ -69,6 +73,7 @@ fun PreferenceScreen(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     statusBarPadding: Boolean = false,
+    groupDividers: Boolean = true
 ) {
     val prefs by dataStoreManager.preferenceFlow.collectAsState(initial = null)
 
@@ -80,10 +85,19 @@ fun PreferenceScreen(
             item { Spacer(modifier = Modifier.statusBarsPadding()) }
         }
 
-        items.forEach { preference ->
+        items.forEachIndexed { index, preference ->
             when (preference) {
                 // Create Preference Group
                 is PreferenceGroup -> {
+                    if (groupDividers) {
+                        items.getOrNull(index - 1)?.let {
+                            if (it !is PreferenceGroup) {
+                                item {
+                                    Divider()
+                                }
+                            }
+                        }
+                    }
                     item {
                         PreferenceGroupHeader(title = preference.title)
                     }
@@ -94,6 +108,11 @@ fun PreferenceScreen(
                                 prefs = prefs,
                                 dataStoreManager = dataStoreManager
                             )
+                        }
+                    }
+                    if (groupDividers) {
+                        item {
+                            Divider()
                         }
                     }
                     item {
